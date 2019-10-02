@@ -1,32 +1,38 @@
 class Image
-attr_accessor :image
-  def initialize()
-       @image = ([
-          [0, 0, 0, 0],
-          [0, 1, 0, 0],
-          [0, 0, 0, 1],
-          [0, 0, 0, 0]
-                     ])
-        newimage = @image.collect { |row| row.collect {0}}
-        (@image.length).times do |row|
-          (@image[row].length).times do |col|
-            if @image[row][col] == 1 then
-              [-1,0,1].each do |offset|
-                #varoffset = offset * distance
-                newimage[row + offset][col] = 1 if row + offset >= 0 and row + offset < newimage.length
-                newimage[row][col + offset] = 1 if col + offset >= 0 and col + offset < newimage[row].length
-                end
-              end
-            end
-          end
-  end
-     def output_image
-        image.each { |x| puts x.join("")}
+  attr_accessor :image
+  def initialize(data)
+   @data = data
+ end
+ def can?(x,y)
+  return true if y >= 0 and y < @data.length and x >= 0 and x < @data[y].length
+ end
+ def blur(dist=1)
+  ni = @data.collect { |row| row.collect { 0 } }
+   (@data.length).times do |row|
+    (@data[row].length).times do |col|
+      if @data[row][col] == 1 then
+        [-1,0,1].each do |dir|
+          ni[row + dir][col] = 1 if can?(row+dir,col)
+          ni[row][col + dir] = 1 if can?(row,col+dir)
+        end
       end
-      # def output_newimage
-      #   newimage.each { |x| puts x.join("")}
-      # end
- image = Image.new()
- image.output_image
- #image.output_newimage
+    end
+  end
+  @data = ni
 end
+def get_image
+  return @data.collect { |row| row.join }.join("\n")
+end
+def output_image
+  puts get_image
+end
+end
+
+i = Image.new([
+      [0, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 0, 1],
+      [0, 0, 0, 0]
+              ]);
+i.blur
+i.output_image
