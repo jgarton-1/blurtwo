@@ -72,7 +72,7 @@ i = Image.new([
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]);
-5.times do |x|
+3.times do |x|
   i.blur(x)
   i.output_image
   sleep(1)
